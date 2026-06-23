@@ -250,14 +250,14 @@
     </header>
 
     <!-- 聊天区域 -->
-    <div id="chat-area">
-        <div style="text-align:center; color:#999; padding:40px 0; font-size:14px;">
+    <div id="chat-area" aria-live="polite">
+        <div id="welcome-msg" style="text-align:center; color:#999; padding:40px 0; font-size:14px;">
             &#x1F30D; 告诉我你想去哪里，我帮你查天气、推荐景点
         </div>
     </div>
 
     <!-- 加载指示器（默认隐藏） -->
-    <div id="loading" class="loading" style="display:none; padding:12px 20px; max-width:800px; margin:0 auto;">
+    <div id="loading" class="loading" role="status" aria-live="polite" style="display:none; padding:12px 20px; max-width:800px; margin:0 auto;">
         思考中<span class="dots"><span></span><span></span><span></span></span>
     </div>
 
@@ -269,6 +269,7 @@
                 type="text"
                 placeholder="请输入您的问题，例如：今天北京天气怎么样？"
                 autocomplete="off"
+                aria-label="输入您的问题"
             />
             <button id="send-btn" onclick="sendMessage()">&#x2708;&#xFE0F; 发送</button>
         </div>
@@ -296,10 +297,7 @@
             if (!query) return;
 
             // 清除初始提示（如果有的话）
-            const placeholder = chatArea.querySelector('div:first-child');
-            if (placeholder && placeholder.style.textAlign === 'center' && chatArea.children.length === 1) {
-                chatArea.innerHTML = '';
-            }
+            document.getElementById('welcome-msg')?.remove();
 
             // 显示用户消息
             addUserMessage(query);
@@ -366,7 +364,7 @@
 
             div.innerHTML = `
                 <div class="reasoning-chain">
-                    <div class="chain-header" onclick="toggleChain(this)">
+                    <div class="chain-header" tabindex="0" role="button" onclick="toggleChain(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleChain(this)}">
                         <span class="arrow">&#x25BC;</span>
                         &#x1F9E0; Agent 推理过程（${steps.length} 轮）
                     </div>
@@ -405,6 +403,9 @@
             loadingEl.style.display = loading ? 'flex' : 'none';
             sendBtn.disabled = loading;
             queryInput.disabled = loading;
+            if (!loading) {
+                queryInput.focus();
+            }
         }
 
         function toggleChain(header) {
@@ -416,6 +417,7 @@
         }
 
         function escapeHtml(text) {
+            if (text == null) return '';
             const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
             return String(text).replace(/[&<>"']/g, c => map[c]);
         }
