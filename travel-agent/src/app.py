@@ -12,6 +12,7 @@ FastAPI 应用，提供 POST /api/chat 端点。
 """
 
 from fastapi import FastAPI
+from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from dotenv import load_dotenv
@@ -23,6 +24,9 @@ load_dotenv()
 
 # 创建 FastAPI 应用实例
 app = FastAPI(title="智能旅行助手 Agent")
+
+# 在模块级别创建 Agent，复用避免每次请求都重新编译
+travel_agent = create_travel_agent()
 
 
 # ── 请求/响应模型 ──────────────────────────────────
@@ -80,13 +84,18 @@ def extract_steps_and_answer(messages: list) -> tuple[list[dict], str]:
 @app.post("/api/chat")
 def chat(request: ChatRequest):
     """处理聊天请求，运行 Agent 并返回结果。"""
-    agent = create_travel_agent()
-    result = agent.invoke({"messages": [{"role": "user", "content": request.query}]})
-    steps, answer = extract_steps_and_answer(result["messages"])
-    return {
-        "steps": steps,
-        "answer": answer,
-    }
+    try:
+        result = travel_agent.invoke({"messages": [{"role": "user", "content": request.query}]})
+        steps, answer = extract_steps_and_answer(result["messages"])
+        return {
+            "steps": steps,
+            "answer": answer,
+        }
+    except Exception as e:
+        return JSONResponse(
+            status_code=500,
+            content={"error": "Agent invocation failed", "detail": str(e)},
+        )
 
 
 # ── 静态文件挂载 ───────────────────────────────────
