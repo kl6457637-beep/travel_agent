@@ -14,7 +14,7 @@ from langchain.agents import create_agent
 from .tools import get_weather, recommend_spot
 
 
-def create_travel_agent():
+def create_travel_agent(debug: bool = False):
     """创建旅行助手 Agent，返回编译好的 StateGraph。
 
     LangChain 1.3 中 create_agent 替代了旧版的：
@@ -22,6 +22,9 @@ def create_travel_agent():
     - AgentExecutor（执行 Agent 循环）
 
     现在这俩角色合二为一，create_agent 直接返回一个可执行的图。
+
+    Args:
+        debug: 是否打印 Agent 每一步的执行细节。CLI 模式建议 True，Web 模式必须 False
 
     Returns:
         CompiledStateGraph: 编译好的 Agent 图，调用 .invoke({"messages": [...]}) 即可运行
@@ -64,7 +67,7 @@ def create_travel_agent():
         model=llm,
         tools=tools,
         system_prompt=system_prompt,
-        debug=True,  # 打印每一步的执行细节，替代旧版 verbose=True
+        debug=debug,  # Web 模式关掉避免 GBK 编码问题
     )
 
     return agent
