@@ -25,8 +25,6 @@ def check_env() -> bool:
     missing = []
     if not os.getenv("DEEPSEEK_API_KEY"):
         missing.append("DEEPSEEK_API_KEY")
-    if not os.getenv("QWEATHER_API_KEY"):
-        missing.append("QWEATHER_API_KEY")
 
     if missing:
         print("=" * 60)
