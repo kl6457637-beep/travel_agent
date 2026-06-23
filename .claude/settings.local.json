@@ -1,0 +1,31 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:github.com)",
+      "Bash(mkdir -p \"d:/工单agent/docs/superpowers/specs\")",
+      "Bash(git init *)",
+      "Bash(pip install *)",
+      "Bash(python -c \"from src.tools.weather import get_weather; print\\(type\\(get_weather\\)\\)\")",
+      "Bash(python -c \"from src.tools.spot import recommend_spot; print\\(type\\(recommend_spot\\)\\)\")",
+      "Bash(python -c ' *)",
+      "Bash(python -c \"import langchain; print\\(langchain.__version__\\)\")",
+      "Bash(python -c \"from langchain.agents import AgentExecutor; print\\('AgentExecutor OK'\\)\")",
+      "Bash(python -c \"from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder; print\\('Prompt OK'\\)\")",
+      "Bash(python -c \"import langchain.agents; print\\(dir\\(langchain.agents\\)\\)\")",
+      "Bash(python -c \"import langchain; import pkgutil; mods = [m.name for m in pkgutil.iter_modules\\(langchain.__path__, langchain.__name__ + '.'\\)]; print\\([m for m in mods if 'agent' in m.lower\\(\\)]\\)\")",
+      "Bash(python -c \"from langchain.agents import create_agent; help\\(create_agent\\)\")",
+      "Bash(python -c \"from src.tools.weather import get_weather; print\\(get_weather.invoke\\({'city': 'Beijing', 'date': 'today'}\\)\\)\")",
+      "Bash(python -c \"from src.tools.weather import get_weather; print\\(get_weather.invoke\\({'city': 'beijing', 'date': 'today'}\\)\\)\")",
+      "Bash(curl -s --max-time 5 \"https://api.open-meteo.com/v1/forecast?latitude=39.9&longitude=116.4&current=temperature_2m\")",
+      "Bash(curl -s --max-time 5 \"http://www.weather.com.cn/data/sk/101010100.html\")",
+      "Bash(curl -s --max-time 5 \"https://www.weather.com.cn/data/sk/101010100.html\")",
+      "Bash(python -X utf8 src/main.py)",
+      "Bash(python -X utf8 -m src.main)",
+      "Bash(git add *)",
+      "Bash(git commit *)"
+    ],
+    "additionalDirectories": [
+      "d:\\工单agent\\docs\\superpowers"
+    ]
+  }
+}
